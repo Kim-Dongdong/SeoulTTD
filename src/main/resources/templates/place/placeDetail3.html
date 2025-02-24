@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Place Details</title>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .place-details {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .place-details h2 {
+            text-align: center;
+        }
+        .details, .reviews {
+            margin-top: 20px;
+            text-align: left;
+        }
+        .reviews ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .reviews li {
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        .photos img {
+            max-width: 100%;
+            height: auto;
+            margin: 10px 0;
+        }
+        .buttons {
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        .buttons button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .buttons .reserve-button:hover {
+            background-color: #45a049;
+        }
+        .buttons .favorite-button {
+            background-color: #f39c12;
+        }
+        .buttons .favorite-button:hover {
+            background-color: #e67e22;
+        }
+        .alert {
+            padding: 20px;
+            background-color: #f44336; /* Red */
+            color: white;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+<div class="place-details">
+    <h2 th:text="${place.name}">Place Name</h2>
+
+     Place Photos
+    <div class="photos">
+        <div th:each="photo : ${place.photos}">
+            <img th:src="@{${photo}}" alt="Place photo"/>
+        </div>
+    </div>
+
+    <div class="details">
+        <p><strong>Type:</strong> <span th:text="${place.type}">Cafe</span></p>
+        <p><strong>Address:</strong> <span th:text="${place.address}">123 Street, City</span></p>
+        <p><strong>Price:</strong> <span th:text="${place.price}">$0.00</span></p>
+        <p><strong>Postal Code:</strong> <span th:text="${place.postalCode}">12345</span></p>
+        <p><strong>Phone Number:</strong> <span th:text="${place.phoneNumber}">123-456-7890</span></p>
+        <p><strong>Operating Hours:</strong> <span th:text="${place.operatingStart}">09:00 AM</span> - <span th:text="${place.operatingEnd}">06:00 PM</span></p>
+        <p><strong>Website:</strong> <a th:href="${place.website}" th:text="${place.website}">www.website.com</a></p>
+
+        <li th:each="placeInfo : ${placeInfos}">
+            <strong>Theme:</strong> <span th:text="${placeInfo.name}">ThemeName</span>
+        </li>
+    </div>
+
+    <div class="reviews">
+        <h3>Reviews</h3>
+        <ul>
+            <li th:each="review : ${reviews}">
+                <p><strong>User:</strong> <span th:text="${review.user.name}">User Name</span></p>
+                <p><strong>Rating:</strong> <span th:text="${review.rating}">5</span>/5</p>
+                <p><strong>Comment:</strong> <span th:text="${review.comment}">This place is great!</span></p>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Buttons for Reservation and Add to Favorite -->
+    <div class="buttons">
+        <form th:action="@{/reserve}" method="get">
+            <input type="hidden" name="userId" th:value="${userId}"/>
+            <input type="hidden" name="placeId" th:value="${placeId}"/>
+            <button type="submit" class="reserve-button">Reserve</button>
+        </form>
+        <form th:action="@{/addFavorite}" method="get">
+            <input type="hidden" name="userId" th:value="${userId}"/>
+            <input type="hidden" name="placeId" th:value="${placeId}"/>
+            <button type="submit" class="favorite-button">Add to Favorites</button>
+        </form>
+<!--        <div th:if="${err}" class="alert">-->
+<!--            <strong>Warning!</strong> <span th:text="${err}"></span>-->
+<!--        </div>-->
+    </div>
+
+</div>
+</body>
+</html>

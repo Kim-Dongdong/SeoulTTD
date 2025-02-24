@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="container">
+    <div class="row justify-content-center">
+
+        <div class="col-md-8 text-center">
+            <form>
+                <div class="profile-header py-4">
+                    <img th:src="@{/images/profile-photo.jpg}" alt="User's Profile Photo" class="rounded-circle profile-photo">
+                    <h1 class="username mt-3" th:field="name" th:text="${name}">User's Name</h1>
+                </div>
+
+                <div class="profile-content mt-5">
+
+                    <!-- Reservation History Section -->
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <h2 class="card-title">Reservation History</h2>
+                                <ul class="list-group list-group-flush">
+                                    <!-- Loop through reservations list -->
+                                    <li class="list-group-item" th:each="reservation : ${reservations}">
+                                        <span th:text="${reservation.place.name}">Reservation Name</span> -
+                                        <span th:text="${reservation.reservedDate}">Reservation Date</span>
+                                    </li>
+                                    <!-- Display when the list is empty -->
+                                    <li class="list-group-item" th:if="${#lists.isEmpty(reservations)}">No reservations yet.</li>
+                                </ul>
+                            </div>
+                        </div>
+
+
+                    <!-- Favorites List Section -->
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <h2 class="card-title">Favorites List</h2>
+                                <ul class="list-group list-group-flush">
+                                    <!-- Loop through favorites list -->
+                                    <li class="list-group-item" th:each="favorite : ${favorites}">
+                                        <span th:text="${favorite.name}">Place Name</span>
+                                        <span th:text="${favorite.address}">Place Address</span>
+                                        <span th:text="${favorite.phoneNumber}">Place PhoneNumber</span>
+                                        <span th:text="${favorite.website}">Place website</span>
+                                    </li>
+                                    <!-- Display when the list is empty -->
+                                    <li class="list-group-item" th:if="${#lists.isEmpty(favorites)}">No favorites yet.</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                    <!-- Reviews Written by Me Section -->
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <h2 class="card-title">Reviews Written by Me</h2>
+                                <ul class="list-group list-group-flush">
+                                    <!-- Loop through reviews list -->
+                                    <li class="list-group-item" th:each="review : ${reviews}">
+                                        <strong th:text="${review.place.name}">Review Place</strong> -
+                                        <span th:text="${review.rating}">Review Rate</span><br>
+                                        <p th:text="${review.comment}">Review Content</p>
+                                    </li>
+                                    <!-- Display when the list is empty -->
+                                    <li class="list-group-item" th:if="${#lists.isEmpty(reviews)}">No reviews yet.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS and dependencies -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

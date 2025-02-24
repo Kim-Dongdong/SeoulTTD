@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title th:text="${placeName}">Place Name</title>
+  <style>
+    .container {
+        width: 50%;
+        margin: 0 auto;
+        text-align: center;
+    }
+    .place-name {
+        font-weight: bold;
+        font-size: 36px;
+        margin-top: 20px;
+    }
+    .time-table {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin: 20px 0;
+    }
+    .time-slot {
+        border: 1px solid #ddd;
+        padding: 10px;
+        margin: 5px;
+        width: 80px;
+        text-align: center;
+        cursor: pointer;
+        background-color: #f9f9f9;
+    }
+    .reserve-button {
+        display: inline-block;
+        padding: 15px 30px;
+        font-size: 18px;
+        background-color: #4CAF50;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        margin-top: 30px;
+    }
+     /* 선택된 시간 슬롯 스타일 */
+     .selected {
+         background-color: red;
+         color: white;
+     }
+  </style>
+</head>
+<body>
+<div class="container">
+  <form th:action="@{/reserveDetail}" method="post">
+
+    <!-- 1. 장소 이름 -->
+    <div class="place-name" th:text="${placeName}">Place Name</div>
+
+    <!-- 2. 장소 선택 -->
+    <div class="theme-select">
+      <label for="theme">Select Place:</label>
+      <select id="theme" name="placeInfo" required>
+        <option value="" disabled selected>Select a place</option>
+        <option th:each="placeInfo : ${placeInfos}"
+                th:value="${placeInfo.id}"
+                th:text="${placeInfo.name}"></option>
+      </select>
+    </div>
+
+    <!-- Hidden input to store selected time -->
+    <input type="hidden" name="placeId"  th:value="${placeId}" />
+    <input type="hidden" name="userId" th:value="${userId}" />
+<!--    <input type="hidden" id="selectedTime" name="selectedTime" th:value="${selectedTime}" />-->
+<!--    <input type="hidden" id="selectedTime" name="selectedTime" th:value="${selectedTime}" />-->
+
+    <!-- 4. 예약 버튼 -->
+    <button type="submit" class="reserve-button">ReserveDetail</button>
+  </form>
+</div>
+
+<style>
+  /* 선택된 시간 슬롯 스타일 */
+  .selected {
+      background-color: red;
+      color: white;
+  }
+</style>
+
+<script>
+  function selectTime(selectedIndex) {
+      // 선택된 시간 값 설정 (시간 값이 정확히 전달되도록 설정)
+      const selectedSlot = document.querySelectorAll('.time-slot')[selectedIndex];
+      const selectedTime = selectedSlot.textContent.trim();
+      document.getElementById('selectedTime').value = selectedTime;
+
+      // 모든 타임 슬롯의 스타일을 초기화 (예: 빨간색 제거)
+      const slots = document.querySelectorAll('.time-slot');
+      slots.forEach(slot => slot.classList.remove('selected'));
+
+      // 선택된 슬롯과 그 뒤의 슬롯들을 빨간색으로 칠함
+      for (let i = selectedIndex; i < slots.length; i++) {
+          slots[i].classList.add('selected');
+      }
+  }
+</script>
+
+
+</body>
+</html>

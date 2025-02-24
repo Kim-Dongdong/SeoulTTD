@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${placeName}">Place Name</title>
+    <style>
+        .container {
+            width: 50%;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .place-name {
+            font-weight: bold;
+            font-size: 36px;
+            margin-top: 20px;
+        }
+        .time-slot {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin: 5px;
+            width: 80px;
+            text-align: center;
+            cursor: pointer;
+            background-color: #f9f9f9;
+        }
+        .reserve-button {
+            display: inline-block;
+            padding: 15px 30px;
+            font-size: 18px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 30px;
+        }
+        .time-display {
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <form th:action="@{/reserve}" method="post">
+
+        <!-- 1. 장소 이름 -->
+        <div class="place-name" th:text="${placeName}">Place Name</div>
+
+        <!-- 2. 테마 이름 -->
+        <div class="theme-select">
+            <label th:text="${placeInfoName}">Select Place: </label>
+        </div>
+
+        <!-- 월 셀렉트박스 -->
+        <label for="monthSelect">월을 선택하세요:</label>
+        <select id="monthSelect" name="selectedMonth">
+            <option value="" disabled selected>월을 선택하세요</option>
+            <option value="1">1월</option>
+            <option value="2">2월</option>
+            <option value="3">3월</option>
+            <option value="4">4월</option>
+            <option value="5">5월</option>
+            <option value="6">6월</option>
+            <option value="7">7월</option>
+            <option value="8">8월</option>
+            <option value="9">9월</option>
+            <option value="10">10월</option>
+            <option value="11">11월</option>
+            <option value="12">12월</option>
+        </select>
+        <br>
+
+        <!-- 일 셀렉트박스 -->
+        <label for="daySelect">일을 선택하세요:</label>
+        <select id="daySelect" name="selectedDay">
+            <option value="" disabled selected>일을 선택하세요</option>
+            <option th:each="day : ${#numbers.sequence(1, 31)}"
+                    th:value="${day}"
+                    th:text="${day}"></option>
+        </select>
+        <br>
+
+        <!-- 타임 테이블 셀렉트박스 -->
+        <label for="timeSelect">예약 시간을 선택하세요:</label>
+        <select id="timeSelect" name="selectedTime">
+            <option value="" disabled selected>시간을 선택하세요</option>
+            <option th:each="hour, iterStat : ${#numbers.sequence(operatingStart, operatingEnd)}"
+                    th:value="${hour}"
+                    th:text="${hour}"></option>
+        </select>
+
+        <!-- 선택된 시간 정보 표시 -->
+        <div class="time-display" id="timeDisplay"></div>
+
+        <!-- Hidden inputs to store additional data -->
+        <input type="hidden" name="placeId" th:value="${placeId}" />
+        <input type="hidden" name="userId" th:value="${userId}" />
+        <input type="hidden" name="placeInfoId" th:value="${placeInfoId}" />
+
+        <!-- 4. 예약 버튼 -->
+        <button type="submit" class="reserve-button">Reserve</button>
+    </form>
+</div>
+
+
+
+<script>
+    document.getElementById('timeSelect').addEventListener('change', function() {
+        // 선택된 시간
+        const selectedTime = this.value;
+        const defaultTime = /*[[${defaultTime}]]*/ 2; // 기본 예약 시간 (타임리프로 서버에서 설정된 값)
+
+        if (selectedTime) {
+            // 시간 계산 (시:분 형식에서 시만 추출)
+            const startHour = parseInt(selectedTime);
+            const endHour = startHour + defaultTime;
+
+            // 종료 시간이 24시를 넘는 경우 처리
+            const endTime = endHour < 24 ? endHour : endHour - 24;
+
+            // 화면에 시간 표시
+            const displayText = selectedTime + ":00 ~ " + endTime + ":00";
+            document.getElementById('timeDisplay').textContent = displayText;
+        } else {
+            document.getElementById('timeDisplay').textContent = "";
+        }
+    });
+</script>
+
+
+</body>
+</html>

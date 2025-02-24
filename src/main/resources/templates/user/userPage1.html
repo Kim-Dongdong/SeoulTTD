@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>MyPage</title>
+    <style>
+        .form-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .form-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 300px;
+        }
+
+        .form-box input {
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+<div class="form-container">
+    <div class="form-box">
+        <h2>MyPage</h2>
+
+        <form>
+            <div>
+                <label for="reservation">예약 장소</label>
+                <tr id="reservation", th:field="reservations" th:each="reservation : ${reservations}">
+                    <td th:text="${reservation.place.name}">Reservation Name</td>
+                    <td th:text="${reservation.reservedDate}">Reservation Date</td>
+                </tr>
+                <!-- Display when the list is empty -->
+                <tr class="list-group-item" th:if="${#lists.isEmpty(reservations)}">No reservations yet.</tr>
+
+            </div>
+
+            <div>
+                <label for="favorite">즐겨찾기</label>
+                <!-- Loop through favorites list -->
+                <tr id="favorite", th:field="favorites" th:each="favorite : ${favorites}">
+                    <td th:text="${favorite.name}">Place Name</td>
+                    <td th:text="${favorite.address}">Place Address</td>
+                    <td th:text="${favorite.phoneNumber}">Place PhoneNumber</td>
+                    <td th:text="${favorite.website}">Place website</td>
+                </tr>
+                <!-- Display when the list is empty -->
+                <tr class="list-group-item" th:if="${#lists.isEmpty(favorites)}">No favorites yet.</tr>
+            </div>
+
+            <div>
+                <label for="review">작성리뷰</label>
+                <!-- Loop through reviews list -->
+                <tr id="review" th:field="reviews" th:each="review : ${reviews}">
+                    <td th:text="${review.place.name}">Review Place</td>
+                    <td th:text="${review.rating}">Review Rate</td>
+                    <td th:text="${review.comment}">Review Content</td>
+                </tr>
+                <!-- Display when the list is empty -->
+                <tr class="list-group-item" th:if="${#lists.isEmpty(reviews)}">No reviews yet.</tr>
+            </div>
+
+        </form>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>회원가입</title>
+    <style>
+        .form-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .form-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 300px;
+        }
+
+        .form-box input {
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+<div class="form-container">
+    <div class="form-box">
+        <h2>회원가입</h2>
+        <form th:action="@{/register}" th:object="${registerForm}" method="post">
+            <div th:if="${#fields.hasGlobalErrors()}">
+                <p class="field-error" th:each="err : ${#fields.globalErrors()}"
+                   th:text="${err}">전체 오류 메시지</p>
+            </div>
+            <div>
+                <label for="loginId">로그인 ID</label>
+                <input type="text", id="loginId" th:field="*{loginId}" placeholder="아이디" required,
+                th:errorclass="field-error"/>
+            </div>
+
+            <div>
+                <label for="password">비밀번호</label>
+                <input type="text", id="password" th:field="*{password}" placeholder="비밀번호" required,
+                       th:errorclass="field-error"/>
+            </div>
+
+            <div>
+                <label for="name">이름</label>
+                <input type="text", id="name" th:field="*{name}" placeholder="성함" required,
+                       th:errorclass="field-error"/>
+            </div>
+
+            <div>
+                <label for="email">이메일</label>
+                <input type="text", id="email" th:field="*{email}" placeholder="이메일" required,
+                       th:errorclass="field-error"/>
+            </div>
+
+            <div>
+                <label for="phoneNum">전화번호</label>
+                <input type="text", id="phoneNum" th:field="*{phoneNum}" placeholder="전화번호" required,
+                       th:errorclass="field-error"/>
+            </div>
+
+            <button type="submit">가입하기</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>
